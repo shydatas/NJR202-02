@@ -1,3 +1,4 @@
+```
 de-project/
 ├── .venv/                                   # Python 虛擬環境
 ├── .gitignore                               # Git 忽略檔案設定
@@ -29,7 +30,7 @@ de-project/
 │   │   ├── docker-compose-producer.yml
 │   │   └── docker-compose-worker.yml
 └──
-
+```
 
 ```
 git clone
@@ -68,4 +69,5 @@ docker compose -f docker_compose/docker-compose-broker.yml up -d
 docker compose -f docker_compose/docker-compose-producer.yml up
 docker compose -f docker_compose/docker-compose-worker.yml up
 ```
+
 
