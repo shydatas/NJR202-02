@@ -4,7 +4,7 @@ from sqlalchemy import MetaData, Table, Column
 from sqlalchemy import Boolean, Float, String, Integer, Text, DECIMAL, DATETIME
 from sqlalchemy.dialects.mysql import LONGTEXT
 
-from .configuration import (
+from data_ingestion.database.configuration import (
     MYSQL_USERNAME,
     MYSQL_PASSWORD,
     MYSQL_HOST,

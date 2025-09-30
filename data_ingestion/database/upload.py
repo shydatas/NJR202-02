@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import MetaData, Table
 from sqlalchemy.dialects.mysql import insert
 
-from .configuration import (
+from data_ingestion.database.configuration import (
     MYSQL_USERNAME,
     MYSQL_PASSWORD,
     MYSQL_HOST,
