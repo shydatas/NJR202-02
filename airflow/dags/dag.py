@@ -11,6 +11,36 @@ from data_ingestion.scraper import (
     get_game_review,
 )
 
+from data_ingestion.message_queue.tasks import (
+    get_game_information_celery,
+    get_game_review_celery,
+)
+
+def split(total_count, k: int = 30):
+    base = math.ceil(total_count / k)
+
+    start = []
+    end = []
+
+    for i in range(k):
+
+        start.append(i * base)
+
+        if i == (k - 1):
+            end.append(total_count)
+        else:
+            end.append(i * base + base)
+    
+    return start, end
+
+application_list = get_application_list()
+
+start, end = split(len(application_list))
+
+
+def trigger_scraper(application_list):
+    get_game_information_celery.delay(application_list)
+
 
 default_arguments = {
     "owner": "NJR202-02-22",
@@ -22,23 +52,6 @@ default_arguments = {
     # "email_on_failure": False,
     # "email_on_retry": False,
 }
-
-
-def step_1(**context):
-    application_list = get_application_list()
-    print(len(application_list))
-    return application_list
-
-def step_2(**context):
-    application_list = context["task_instance"].xcom_pull(task_ids="step_1")
-    
-    for item in application_list[:25]:
-        application_id = item.get("appid")
-        get_game_information(application_id)
-
-def split(k):
-    
-
 
 
 with DAG(
@@ -55,15 +68,23 @@ with DAG(
         task_id="start"
     )
 
-    step_1_task = PythonOperator(
-        task_id="step_1",
-        python_callable=step_1,
-    )
+    batch_tasks = []
 
-    step_2_task = PythonOperator(
-        task_id="step_2",
-        python_callable=step_2,
-    )
+    for batch in zip(start, end):
+        task = PythonOperator(
+            task_id=f"scrape_{}",
+            python_callable=trigger_scraper,
+            op_args=[],
+        )
+        batch_tasks.append(task)
+
+
+    
+
+for batch in zip(start, end):
+    print(f"Send tasks{batch}")
+    get_game_information_celery.delay(application_list=application_list[batch[0]:batch[1]])
+
 
     # get_application_list_op = PythonOperator(
     #     task_id="get_application_list",

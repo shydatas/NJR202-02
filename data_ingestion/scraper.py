@@ -259,7 +259,7 @@ def get_game_review(application_id: str, filtered_language: str = "tchinese"):
                 "last_played": datetime.fromtimestamp(review_data["author"]["last_played"]),
                 
                 "language": review_data["language"],
-                "review": (review_data["review"]).strip,
+                "review": (review_data["review"]).strip(),
                 "timestamp_created": datetime.fromtimestamp(review_data["timestamp_created"]),
                 "timestamp_updated": datetime.fromtimestamp(review_data["timestamp_updated"]),
                 "voted_up": review_data["voted_up"],
@@ -275,23 +275,19 @@ def get_game_review(application_id: str, filtered_language: str = "tchinese"):
 
             game_review_detail_list.append(game_review_detail_dict)
 
-        insert_data(
-            table_name="game_review_detail",
-            dataframe=pd.DataFrame(game_review_detail_list),
-            if_exists_mode="append"
-        )
+        # insert_data(
+        #     table_name="game_review_detail",
+        #     dataframe=pd.DataFrame(game_review_detail_list),
+        #     if_exists_mode="append"
+        # )
 
         insert_data_sqlalchemy(
             table_object=game_review_detail_table,
             data=game_review_detail_list
         )
 
-        if response.json()["query_summary"]["num_reviews"] < 100:
+        if (response.json()["query_summary"]["num_reviews"] < 100) or (page == 3):
             print(response.json()["query_summary"]["num_reviews"])
-            break
-
-        if page == 3:
-            print("Page is 3")
             break
 
         next_page_cursor = response.json()["cursor"]

@@ -4,7 +4,7 @@ services:
 
     worker:  # 定義一個服務，名稱為 crawler_twse
         image: shydatas/data_ingestion:latest  # 使用的映像檔名稱與標籤（版本）
-        container_name: "scraper_worker"  # 設定 container_name = crawler_hahow_worker  
+        container_name: "scraper_worker"  # 設定 container_name = crawler_hahow_worker
         command: uv run celery -A data_ingestion.message_queue.worker worker --loglevel=info --hostname=worker%h
         # 啟動容器後執行的命令，這裡是啟動 Celery worker，指定 app 為 data_ingestion.worker，設定日誌等級為 info，
 

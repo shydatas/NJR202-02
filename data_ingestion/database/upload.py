@@ -51,6 +51,7 @@ def insert_data_sqlalchemy(
             except IntegrityError as e:
                 print(f"Insert failed due to IntegrityError (可能是主鍵重複): {e.orig}")
                 continue
+
     print(f"Finish to Insert data")
 
 
