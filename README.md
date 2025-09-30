@@ -29,7 +29,16 @@ de-project/
 │   │   ├── docker-compose-broker.yml
 │   │   ├── docker-compose-producer.yml
 │   │   └── docker-compose-worker.yml
-└──
+│   │
+├── airflow/                          # 🔥 核心資料擷取模組
+│   ├── airflow.cfg
+│   ├── docker-compose-airflow.yml
+│   ├── Dockerfile
+│   │
+│   ├── dags
+│   │   ├── __init__.py
+│   │
+└── 
 ```
 
 ```
@@ -69,5 +78,6 @@ docker compose -f docker_compose/docker-compose-broker.yml up -d
 docker compose -f docker_compose/docker-compose-producer.yml up
 docker compose -f docker_compose/docker-compose-worker.yml up
 ```
+
 
 
