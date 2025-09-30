@@ -1,6 +1,6 @@
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 import re
 import json
@@ -66,6 +66,8 @@ def get_game_information(application_id: str):
         is_game = 0
     else:
         is_game = 1
+
+        get_game_review(application_id)
         
         game_detail = response.json()[f"{application_id}"]["data"]
 
@@ -226,6 +228,7 @@ def get_game_review(application_id: str, filtered_language: str = "tchinese"):
                 "total_positive": response.json()["query_summary"]["total_positive"],
                 "total_negative": response.json()["query_summary"]["total_negative"],
                 "total_reviews": response.json()["query_summary"]["total_reviews"],
+                "capture_date": datetime.now(timezone.utc),
             }
 
             # insert_data(
@@ -252,7 +255,7 @@ def get_game_review(application_id: str, filtered_language: str = "tchinese"):
                 "num_reviews": review_data["author"]["num_reviews"],
                 "playtime_forever": review_data["author"]["playtime_forever"],
                 "playtime_last_two_weeks": review_data["author"]["playtime_last_two_weeks"],
-                "playtime_at_review": review_data["author"]["playtime_at_review"],
+                "playtime_at_review": review_data.get("author").get("playtime_at_review", None),
                 "last_played": datetime.fromtimestamp(review_data["author"]["last_played"]),
                 
                 "language": review_data["language"],

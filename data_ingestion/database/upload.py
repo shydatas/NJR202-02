@@ -2,6 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy import MetaData, Table
 from sqlalchemy.dialects.mysql import insert
+from sqlalchemy.exc import IntegrityError
 
 from data_ingestion.database.configuration import (
     MYSQL_USERNAME,
@@ -44,9 +45,12 @@ def insert_data_sqlalchemy(
 
     with engine.begin() as connection:
         for row in data:
-            insert_statement = insert(table_object).values(**row)
-            connection.execute(insert_statement)
-
+            try:
+                insert_statement = insert(table_object).values(**row)
+                connection.execute(insert_statement)
+            except IntegrityError as e:
+                print(f"Insert failed due to IntegrityError (可能是主鍵重複): {e.orig}")
+                continue
     print(f"Finish to Insert data")
 
 
