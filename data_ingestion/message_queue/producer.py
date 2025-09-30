@@ -31,4 +31,4 @@ start, end = split(len(application_list))
 
 for batch in zip(start, end):
     print(f"Send tasks{batch}")
-    get_game_information_celery.delay(application_list[batch[0]:batch[1]])
+    get_game_information_celery.delay(application_list=application_list[batch[0]:batch[1]])

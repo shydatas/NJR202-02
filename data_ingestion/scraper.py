@@ -183,7 +183,7 @@ def get_game_information(application_id: str):
         data=[game_check]
     )
 
-    time.sleep(0.2)
+    time.sleep(1)
 
     return None
 
@@ -298,7 +298,7 @@ def get_game_review(application_id: str, filtered_language: str = "tchinese"):
 
         page = page + 1
         
-        time.sleep(0.2)
+        time.sleep(1)
 
     return None
 
